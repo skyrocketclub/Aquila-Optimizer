@@ -36,11 +36,12 @@
 #include <iostream>
 #include <vector>
 
-#include "initializePopulation.cpp"
+#include "helper.cpp"
 #include "methodOne.cpp"
 #include "methodTwo.cpp"
 #include "methodThree.cpp"
 #include "methodFour.cpp"
+#include "chooseBest.cpp"
 
 using std::cin;
 using std::cout;
@@ -53,5 +54,51 @@ int main()
     factorBoundaries = {{5, 20}, {4.5, 6.0}, {60, 90}, {3, 6}, {15, 30}};
 
     // initialize certain paramters
-    int populationSize = 5;
+    int populationSize = 3;
+    int maxIter = 200; // maximum number of iterations
+    int currentIter = 0;
+
+    // Getting the randomly initialised matrix
+    vector<vector<double>> initialPopulation = randomInitializer(factorBoundaries, populationSize);
+    //--------------------------
+
+    // for (auto m : initialPopulation)
+    // {
+    //     for (auto n : m)
+    //     {
+    //         cout << n << " ";
+    //     }
+    //     cout << std::endl;
+    // }
+    //--------------------------
+
+    int best{};
+    cout << "1 - Maximize\n2 - Minimize\nchoice: ";
+    cin >> best;
+
+    vector<double> bestSolution{};
+    best == 1 ? bestSolution = chooseMax(initialPopulation) : chooseMin(initialPopulation);
+
+    //--------------------
+    // cout << "Testing Best\n";
+    // for (auto j : bestSolution)
+    // {
+    //     cout << j << " ";
+    // }
+    // cout << std::endl;
+    //----------------------------
+
+    vector<double> mean = meanSolution(initialPopulation);
+
+    //-------------------------------------------
+    // cout << "Testing Mean\n";
+    // for (auto x : mean)
+    // {
+    //     cout << x << " ";
+    // }
+    //--------------------------------------------
+
+    while (currentIter < maxIter)
+    {
+    }
 }
