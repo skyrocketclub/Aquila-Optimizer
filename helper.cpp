@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <time.h>
+#include <math.h>
 
 using std::vector;
 // defining the function that will return the randomly initialised population
@@ -9,6 +10,7 @@ using std::vector;
 vector<vector<double>> randomInitializer(vector<vector<double>> &, int);
 double objectiveFunction(vector<double> &);
 vector<double> meanSolution(vector<vector<double>> &);
+double levyDistribution();
 
 vector<vector<double>> randomInitializer(vector<vector<double>> &a, int population)
 {
@@ -77,4 +79,21 @@ vector<double> meanSolution(vector<vector<double>> &a)
         factor = 0;
     }
     return mean;
+}
+
+double levyDistribution()
+{
+    double levy{};
+    double s = 0.01;
+    double beta = 1.5;
+    double u, v;
+    double sigmau = 0.6966;
+
+    srand((unsigned)time(NULL)); // seeding the random numbers
+    u = (float)rand() / RAND_MAX;
+    v = (float)rand() / RAND_MAX;
+
+    levy = s * (u * sigmau) / (pow(abs(v), (1 / beta)));
+
+    return levy;
 }
