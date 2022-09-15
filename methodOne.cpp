@@ -19,7 +19,7 @@ vector<double> methodOne(vector<double> best, vector<double> mean, int currentIt
     mean.pop_back();
 
     //--------------------
-    if (i == 0)
+    if (i == 0 && currentIteration == 0)
     {
         cout << "Testing Best after popping back\n";
         for (auto j : best)
@@ -33,7 +33,7 @@ vector<double> methodOne(vector<double> best, vector<double> mean, int currentIt
     srand((unsigned)time(NULL));
     random = (float)rand() / RAND_MAX;
 
-    if (i == 0)
+    if (i == 0 && currentIteration == 0)
         cout << "Random Number: " << random << std::endl;
 
     // separating the Expanded Exploration into two parts a & b
@@ -75,9 +75,9 @@ vector<double> methodOne(vector<double> best, vector<double> mean, int currentIt
     }
 
     //--------------------
-    if (i == 0)
+    if (i == 0 && currentIteration == 0)
     {
-        cout << "New Location\n";
+        cout << "New Location before boundary check\n";
         for (auto j : newLocation)
         {
             cout << j << " ";
@@ -86,12 +86,24 @@ vector<double> methodOne(vector<double> best, vector<double> mean, int currentIt
     }
     // ----------------------------
 
+    newLocation = checkBoundaries(newLocation);
+
+    if (i == 0 && currentIteration == 0)
+    {
+        cout << "New Location after boundary check\n";
+        for (auto j : newLocation)
+        {
+            cout << j << " ";
+        }
+        cout << std::endl;
+    }
+
     performance = objectiveFunction(newLocation);
     // inserting the performance at the end of the vector of new locations X(t+1)
     newLocation.push_back(performance);
 
     //--------------------
-    if (i == 0)
+    if (i == 0 && currentIteration == 0)
     {
         cout << "Testing new Location with performance\n";
         for (auto j : newLocation)

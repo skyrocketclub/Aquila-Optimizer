@@ -76,8 +76,9 @@ int currentIter = 0;
 int main()
 {
     // initialize the population here by editing the factor boundaries
+
     vector<vector<double>> factorBoundaries;
-    factorBoundaries = {{5, 20}, {4.5, 6.0}, {60, 90}, {3, 6}, {15, 30}};
+    factorBoundaries = {{5.0, 20.0}, {4.5, 6.0}, {60.0, 90.0}, {3.0, 6.0}, {15.0, 30.0}};
 
     // Getting the randomly initialised matrix
     vector<vector<double>> Population = randomInitializer(factorBoundaries, populationSize);
@@ -100,119 +101,261 @@ int main()
 
     vector<double> bestSolution{};
     vector<double> mean{};
+    vector<vector<double>> allBest{};
 
-    // while (currentIter < maxIter)
-    // {
-    // For now, the best and the mean vectors have the objective function values attached...
-    srand((unsigned)time(NULL)); // seeding the random numbers
-    best == 1 ? bestSolution = chooseMax(Population) : bestSolution = chooseMin(Population);
-
-    //--------------------
-    cout << "Testing Best\n";
-    for (auto j : bestSolution)
+    while (currentIter < maxIter)
     {
-        cout << j << " ";
-    }
-    cout << std::endl;
-    // ----------------------------
+        // For now, the best and the mean vectors have the objective function values attached...
+        srand((unsigned)time(NULL)); // seeding the random numbers
+        best == 1 ? bestSolution = chooseMax(Population) : bestSolution = chooseMin(Population);
 
-    for (int i{0}; i < populationSize; i++)
-    {
-        mean = meanSolution(Population);
-
-        if (i == 0)
+        //--------------------
+        if (currentIter == 0)
         {
-            //-------------------------------------------
-            cout << "Testing Mean\n";
-            for (auto x : mean)
+            cout << "Testing Best\n";
+            for (auto j : bestSolution)
             {
-                cout << x << " ";
+                cout << j << " ";
             }
-            //--------------------------------------------
+            cout << std::endl;
         }
 
-        if (currentIter <= (2 / 3) * maxIter)
-        {
-            double randomNumber = (float)rand() / RAND_MAX - 0.2;
+        // ----------------------------
 
-            if (currentIter == 0 && i == 0)
+        // Looping through all the elements
+
+        for (int i{0}; i < populationSize; i++)
+        {
+            mean = meanSolution(Population);
+
+            if (i == 0 && currentIter == 0)
             {
-                cout << "Showing steps for the first element in the first iteration\n";
-                cout << "\nrand chosen: " << randomNumber << std::endl;
+                //-------------------------------------------
+                cout << "Testing Mean\n";
+                for (auto x : mean)
+                {
+                    cout << x << " ";
+                }
+                //--------------------------------------------
             }
 
-            if (randomNumber <= 0.5)
+            if (currentIter <= ((double)2 / 3) * maxIter)
             {
-                // Method 1
+                double randomNumber = (float)rand() / RAND_MAX;
+
+                // displaying the values for the first element in the first iteration...
                 if (currentIter == 0 && i == 0)
                 {
-                    cout << "Using Method 1\n";
+                    cout << "Showing steps for the first element in the first iteration\n";
+                    cout << "\nrand chosen: " << randomNumber << std::endl;
                 }
 
-                vector<double> prospectiveLocation{};
-                prospectiveLocation = methodOne(bestSolution, mean, currentIter, maxIter, i);
-
-                // carrying out the greedy selection
-                if (best == 1)
+                if (randomNumber <= 0.5)
                 {
-                    // Maximize
-                    if (prospectiveLocation.back() > Population.at(i).back())
+                    // Method 1
+                    // displaying the values for the first element in the first iteration...
+                    if (currentIter == 0 && i == 0)
                     {
-                        // Replacement
-                        if (i == 0)
-                        {
-                            cout << "Since " << prospectiveLocation.back() << " > " << Population.at(i).back() << " , replacement occurs...\n";
-                        }
-                        Population.at(i) = prospectiveLocation;
+                        cout << "Using Method 1 since random Number: " << randomNumber << endl;
                     }
-                    else if (prospectiveLocation.back() <= Population.at(i).back())
+
+                    vector<double> prospectiveLocation{};
+                    prospectiveLocation = methodOne(bestSolution, mean, currentIter, maxIter, i);
+
+                    // carrying out the greedy selection
+                    if (best == 1)
                     {
-                        // No Replacement
-                        if (i == 0)
+                        // Maximize
+                        if (prospectiveLocation.back() > Population.at(i).back())
                         {
-                            cout << "Since " << prospectiveLocation.back() << " !> " << Population.at(i).back() << " , replacement does not occur...\n";
+                            // Replacement
+                            // displaying the values for the first element in the first iteration...
+                            if (i == 0 && currentIter == 0)
+                            {
+                                cout << "Since " << prospectiveLocation.back() << " > " << Population.at(i).back() << " , replacement occurs...\n";
+                            }
+                            Population.at(i) = prospectiveLocation;
+                        }
+                        else if (prospectiveLocation.back() <= Population.at(i).back())
+                        {
+                            // No Replacement
+                            // displaying the values for the first element in the first iteration...
+                            if (i == 0 && currentIter == 0)
+                            {
+                                cout << "Since " << prospectiveLocation.back() << " !> " << Population.at(i).back() << " , replacement does not occur...\n";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Minimize
+                        if (prospectiveLocation.back() < Population.at(i).back())
+                        {
+                            // displaying the values for the first element in the first iteration...
+                            if (i == 0 && currentIter == 0)
+                            {
+                                cout << "Since " << prospectiveLocation.back() << " < " << Population.at(i).back() << " , replacement occurs...\n";
+                            }
+                            Population.at(i) = prospectiveLocation;
+                        }
+                        else if (prospectiveLocation.back() >= Population.at(i).back())
+                        {
+                            if (i == 0 && currentIter == 0)
+                            {
+                                cout << "Since " << prospectiveLocation.back() << " !< " << Population.at(i).back() << " , replacement does not occur...\n";
+                            }
                         }
                     }
                 }
                 else
                 {
-                    // Minimize
-                    if (prospectiveLocation.back() < Population.at(i).back())
+                    // Method 2
+                    if (currentIter == 0 && i == 0)
                     {
-                        if (i == 0)
-                        {
-                            cout << "Since " << prospectiveLocation.back() << " < " << Population.at(i).back() << " , replacement occurs...\n";
-                        }
-                        Population.at(i) = prospectiveLocation;
+                        cout << "Using Method 2 since random Number: " << randomNumber << endl;
                     }
-                    else if (prospectiveLocation.back() >= Population.at(i).back())
+
+                    srand((unsigned)time(NULL));
+                    vector<double> prospectiveLocation{};
+                    vector<double> randomsolution{};
+
+                    int randomSolutionIndex{};
+                    int r1{15};
+
+                    randomSolutionIndex = rand() % (Population.size());
+                    randomsolution = Population.at(randomSolutionIndex);
+
+                    prospectiveLocation = methodTwo(bestSolution, randomsolution, r1, i, currentIter);
+
+                    // Greedy Selection
+                    if (best == 1)
                     {
-                        if (i == 0)
+                        // Maximize
+                        if (prospectiveLocation.back() > Population.at(i).back())
                         {
-                            cout << "Since " << prospectiveLocation.back() << " !< " << Population.at(i).back() << " , replacement does not occur...\n";
+                            // Replacement
+                            // displaying the values for the first element in the first iteration...
+                            if (i == 0 && currentIter == 0)
+                            {
+                                cout << "Since " << prospectiveLocation.back() << " > " << Population.at(i).back() << " , replacement occurs...\n";
+                            }
+                            Population.at(i) = prospectiveLocation;
+                        }
+                        else if (prospectiveLocation.back() <= Population.at(i).back())
+                        {
+                            // No Replacement
+                            // displaying the values for the first element in the first iteration...
+                            if (i == 0 && currentIter == 0)
+                            {
+                                cout << "Since " << prospectiveLocation.back() << " !> " << Population.at(i).back() << " , replacement does not occur...\n";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Minimize
+                        if (prospectiveLocation.back() < Population.at(i).back())
+                        {
+                            // displaying the values for the first element in the first iteration...
+                            if (i == 0 && currentIter == 0)
+                            {
+                                cout << "Since " << prospectiveLocation.back() << " < " << Population.at(i).back() << " , replacement occurs...\n";
+                            }
+                            Population.at(i) = prospectiveLocation;
+                        }
+                        else if (prospectiveLocation.back() >= Population.at(i).back())
+                        {
+                            if (i == 0 && currentIter == 0)
+                            {
+                                cout << "Since " << prospectiveLocation.back() << " !< " << Population.at(i).back() << " , replacement does not occur...\n";
+                            }
                         }
                     }
                 }
             }
             else
             {
-                // Method 2
+                double randomNumber = (float)rand() / RAND_MAX;
+                if (randomNumber <= 0.5)
+                {
+                    // Method 3
+
+                    vector<double> prospectiveLocation{};
+
+                    prospectiveLocation = methodThree(bestSolution, mean, factorBoundaries);
+                    if (best == 1)
+                    {
+                        // Maximize
+                        if (prospectiveLocation.back() > Population.at(i).back())
+                        {
+                            Population.at(i) = prospectiveLocation;
+                        }
+                        else if (prospectiveLocation.back() <= Population.at(i).back())
+                        {
+                            // No repacement occurs...
+                        }
+                    }
+                    else
+                    {
+                        // Minimize
+                        if (prospectiveLocation.back() < Population.at(i).back())
+                        {
+                            Population.at(i) = prospectiveLocation;
+                        }
+                        else if (prospectiveLocation.back() >= Population.at(i).back())
+                        {
+                            // No repacement occurs...
+                        }
+                    }
+                }
+                else
+                {
+                    // Method 4
+                    vector<double> prospectiveLocation{};
+                    prospectiveLocation = methodFour(bestSolution, Population.at(i), currentIter, maxIter);
+
+                    if (best == 1)
+                    {
+                        // Maximize
+                        if (prospectiveLocation.back() > Population.at(i).back())
+                        {
+                            Population.at(i) = prospectiveLocation;
+                        }
+                        else if (prospectiveLocation.back() <= Population.at(i).back())
+                        {
+                            // No repacement occurs...
+                        }
+                    }
+                    else
+                    {
+                        // Minimize
+                        if (prospectiveLocation.back() < Population.at(i).back())
+                        {
+                            Population.at(i) = prospectiveLocation;
+                        }
+                        else if (prospectiveLocation.back() >= Population.at(i).back())
+                        {
+                            // No repacement occurs...
+                        }
+                    }
+                }
             }
         }
-        else
-        {
-            double randomNumber = (float)rand() / RAND_MAX;
-            if (randomNumber <= 0.5)
-            {
-                // Method 3
-            }
-            else
-            {
-                // Method 4
-            }
-        }
+
+        allBest.push_back(bestSolution);
+        currentIter++;
     }
 
-    // currentIter++;
-    // }
+    cout << endl
+         << endl
+         << "Displaying the best solutions\n";
+    for (int i{0}; i < allBest.size(); i++)
+    {
+        cout << "Iteration " << i + 1 << ": ";
+        for (auto x : allBest.at(i))
+        {
+            cout << x << " ";
+        }
+        cout << endl;
+    }
 }
