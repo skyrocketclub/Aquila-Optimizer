@@ -11,10 +11,11 @@ vector<double> methodOne(vector<double> best, vector<double> mean, int currentIt
     // pop the last elements of the best and the mean...
 
     // when you have gotten X(t+1)... you can get the new f(x), push it and send to main
-    vector<double> newLocation;
+    vector<double> newLocation{};
     double random{};
     double performance{};
 
+    // removing the output values of the best and the mean
     best.pop_back();
     mean.pop_back();
 

@@ -25,7 +25,7 @@ vector<double> methodThree(vector<double> best, vector<double> mean, vector<vect
     srand((unsigned)time(NULL));
 
     // populating (UB-LB)
-    for (int i{0}; factorBoundaries.size(); i++)
+    for (int i{0}; i < factorBoundaries.size(); i++)
     {
         double value = factorBoundaries.at(i).at(1) - factorBoundaries.at(i).at(0);
         boundaryDifference.push_back(value);

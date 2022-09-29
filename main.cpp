@@ -69,8 +69,8 @@ using std::vector;
 double ALPHA = 0.1;
 double GAMMA = 0.1;
 
-int populationSize = 3;
-int maxIter = 200; // maximum number of iterations
+int populationSize = 5;
+int maxIter = 300; // maximum number of iterations
 int currentIter = 0;
 
 int main()
@@ -141,6 +141,8 @@ int main()
 
             if (currentIter <= ((double)2 / 3) * maxIter)
             {
+
+                // random number between 0 & 1...
                 double randomNumber = (float)rand() / RAND_MAX;
 
                 // displaying the values for the first element in the first iteration...
@@ -222,7 +224,7 @@ int main()
                     int randomSolutionIndex{};
                     int r1{15};
 
-                    randomSolutionIndex = rand() % (Population.size());
+                    randomSolutionIndex = rand() % populationSize;
                     randomsolution = Population.at(randomSolutionIndex);
 
                     prospectiveLocation = methodTwo(bestSolution, randomsolution, r1, i, currentIter);
@@ -348,8 +350,8 @@ int main()
 
     cout << endl
          << endl
-         << "Displaying the best solutions\n";
-    for (int i{0}; i < allBest.size(); i++)
+         << "Displaying the best solutions of size " << allBest.size() << std::endl;
+    for (size_t i{0}; i < allBest.size(); i++)
     {
         cout << "Iteration " << i + 1 << ": ";
         for (auto x : allBest.at(i))
