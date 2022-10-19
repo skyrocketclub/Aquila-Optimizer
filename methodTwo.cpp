@@ -40,7 +40,13 @@ vector<double> methodTwo(vector<double> best, vector<double> randomSolution, int
     if (currentElement == 0 && currentIter == 0)
     {
 
-        cout << "s: " << s << "\nu: " << u << "\nsigma: " << sigma << "\nv: " << v << "\nlevy" << levy << std::endl;
+        cout << "s: " << s << "\nu: " << u << "\nsigma: " << sigma << "\nv: " << v << "\nlevy " << levy << std::endl;
+        cout << "Outputing the random solution chosen...\n";
+        for (auto num : randomSolution)
+        {
+            cout << num << " ";
+        }
+        cout << endl;
     }
 
     // we have to pop the last element from x... and the random Solution
